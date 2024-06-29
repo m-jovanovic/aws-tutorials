@@ -1,0 +1,13 @@
+@Aws.Cognito_HostAddress = http://localhost:5017
+
+@AccessToken = ''
+
+GET {{Aws.Cognito_HostAddress}}/weatherforecast/
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+
+###
+
+GET {{Aws.Cognito_HostAddress}}/claims/
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
