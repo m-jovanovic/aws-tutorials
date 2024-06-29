@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  urlshortener:
+    image: ${DOCKER_REGISTRY-}urlshortener
+    container_name: UrlShortener.Api
+    build:
+      context: .
+      dockerfile: UrlShortener/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+
+  urlshortener-db:
+    image: postgres:latest
+    container_name: UrlShortener.Db
+    environment:
+      - POSTGRES_DB=urlshortener
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
