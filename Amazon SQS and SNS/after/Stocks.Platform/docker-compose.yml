@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  stocks.api:
+    image: ${DOCKER_REGISTRY-}stocksapi
+    container_name: Stocks.Api
+    build:
+      context: .
+      dockerfile: Stocks.Api/Dockerfile
+    environment:
+      - RabbitMQ__Host=amqp://stocks-queue:5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    ports:
+      - 5000:8080
+      - 5001:8081
+
+  reporting.api:
+    image: ${DOCKER_REGISTRY-}reportingapi
+    container_name: Reporting.Api
+    build:
+      context: .
+      dockerfile: Reporting.Api/Dockerfile
+    environment:
+      - RabbitMQ__Host=amqp://stocks-queue:5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    ports:
+      - 6000:8080
+      - 6001:8081
+
+
+  riskmanagement.api:
+    image: ${DOCKER_REGISTRY-}riskmanagementapi
+    container_name: RiskManagement.Api
+    build:
+      context: .
+      dockerfile: RiskManagement.Api/Dockerfile
+    environment:
+      - RabbitMQ__Host=amqp://stocks-queue:5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    ports:
+      - 7000:8080
+      - 7001:8081
+
+  stocks.queue:
+    image: rabbitmq:management-alpine
+    container_name: Stocks.Queue
+    hostname: stocks-queue
+    volumes:
+        - ./.containers/queue/data/:/var/lib/rabbitmq
+        - ./.containers/queue/log/:/var/log/rabbitmq
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+
