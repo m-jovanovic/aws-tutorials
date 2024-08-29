@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S3 File Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="upload.js" type="module" defer></script>
+    <script src="upload-multipart.js" type="module" defer></script>
+    <script src="get-presigned.js" type="module" defer></script>
+    <style>
+      .part-progress {
+        transition: all 0.3s ease-out;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+      <h1
+        class="text-2xl font-bold mb-16 text-center flex items-center justify-center"
+      >
+        S3 File Upload
+        <img
+          src="https://cdn.worldvectorlogo.com/logos/amazon-s3-simple-storage-service.svg"
+          alt="Amazon S3 Logo"
+          class="w-16 h-16 ml-4 rounded-md"
+        />
+      </h1>
+
+      <!-- Standard Upload Section -->
+      <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-2">Standard Upload</h2>
+        <input type="file" id="fileInput" class="mb-4 w-full" />
+        <div id="uploadProgress" class="hidden mb-4">
+          <div class="bg-gray-200 rounded-full h-2.5">
+            <div
+              id="progressBar"
+              class="bg-blue-600 h-2.5 rounded-full"
+              style="width: 0%"
+            ></div>
+          </div>
+          <p id="progressText" class="text-sm mt-1">0%</p>
+        </div>
+        <button
+          id="uploadButton"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full"
+        >
+          Upload File
+        </button>
+        <div
+          id="uploadedFileKey"
+          class="mt-4 text-sm text-gray-600 hidden"
+        ></div>
+      </div>
+
+      <!-- Separator -->
+      <hr class="my-8 border-t border-gray-300" />
+
+      <!-- Multipart Upload Section -->
+      <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-2">Multipart Upload</h2>
+        <input type="file" id="fileInputMultipart" class="mb-4 w-full" />
+        <div id="uploadProgressMultipart" class="hidden mb-4">
+          <div class="bg-gray-200 rounded-full h-2.5">
+            <div
+              id="progressBarMultipart"
+              class="bg-blue-600 h-2.5 rounded-full"
+              style="width: 0%"
+            ></div>
+          </div>
+          <p id="progressTextMultipart" class="text-sm mt-1">0%</p>
+        </div>
+        <button
+          id="uploadButtonMultipart"
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full"
+        >
+          Upload File (Multipart)
+        </button>
+        <button
+          id="pauseResumeButton"
+          class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded w-full mt-2 hidden"
+        >
+          Pause
+        </button>
+      </div>
+
+      <!-- Multipart Upload Sidebar -->
+      <div
+        id="multipartSidebar"
+        class="fixed right-0 top-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+      >
+        <div class="p-4">
+          <h3 class="text-lg font-semibold mb-4">Part Upload Progress</h3>
+          <div id="partProgressList"></div>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <hr class="my-8 border-t border-gray-300" />
+
+      <!-- Get Pre-signed URL Section -->
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Get Pre-signed URL</h2>
+        <input
+          type="text"
+          id="objectKeyInput"
+          placeholder="Enter object key"
+          class="w-full px-3 py-2 border rounded-md mb-4"
+        />
+        <div class="flex space-x-2 mb-4">
+          <button
+            id="getUrlButton"
+            class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded flex-grow"
+          >
+            Get Pre-signed URL
+          </button>
+          <button
+            id="clearButton"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+          >
+            Clear
+          </button>
+        </div>
+        <div
+          id="presignedUrlResult"
+          class="text-sm break-all text-blue-600 hover:text-blue-800 hidden"
+        ></div>
+      </div>
+    </div>
+  </body>
+</html>
